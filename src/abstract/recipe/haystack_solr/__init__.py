@@ -79,10 +79,12 @@ class Recipe(object):
     def generate(self, src, dst, **kwargs):
         namespace = self.get_namespace()
         namespace.update(kwargs)
-        # pylint: disable-msg=C0321
-        with open(src, 'rb') as src_stream, open(dst, 'wb') as dst_stream:
-            template = Template(src_stream.read())
-            dst_stream.write(template.substitute(**namespace))
+        src_stream = open(src, 'rb')
+        template = Template(src_stream.read())
+        src_stream.close()
+        dst_stream = open(dst, 'wb')
+        dst_stream.write(template.substitute(**namespace))
+        dst_stream.close()
 
     # pylint: disable-msg=R0912,R0914
     def install(self, update=False):
